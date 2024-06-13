@@ -7,8 +7,6 @@
  */
 await import('./src/env.js');
 
-/** @type {import("next").NextConfig} */
-
 import pwa from 'next-pwa';
 // @ts-ignore
 import nextra from 'nextra';
@@ -19,8 +17,10 @@ const withPwa = pwa({
   // disable: process.env.NODE_ENV === 'development',
 });
 
+/** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  output: 'standalone',
 
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
