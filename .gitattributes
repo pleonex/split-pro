@@ -1,0 +1,2 @@
+# Ensure bash scripts have lf end-line even when git committing from Windows
+*.sh    text eol=lf

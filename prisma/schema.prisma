@@ -4,6 +4,9 @@
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["relationJoins"]
+
+    // Required to run prisma from alpine docker image
+    binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
