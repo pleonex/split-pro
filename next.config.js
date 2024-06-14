@@ -5,7 +5,7 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
-await import('./src/env.js');
+!process.env.SKIP_ENV_VALIDATION && await import('./src/env.js');
 
 import pwa from 'next-pwa';
 // @ts-ignore
@@ -17,8 +17,12 @@ const withPwa = pwa({
   // disable: process.env.NODE_ENV === 'development',
 });
 
-/** @type {import("next").NextConfig} */
-const config = {
+const withNextra = nextra({
+  theme: 'nextra-theme-blog',
+  themeConfig: './theme.config.jsx',
+});
+
+export default withNextra(withPwa({
   reactStrictMode: true,
   output: 'standalone',
 
@@ -61,11 +65,4 @@ const config = {
       },
     ],
   },
-};
-
-const withNextra = nextra({
-  theme: 'nextra-theme-blog',
-  themeConfig: './theme.config.jsx',
-});
-
-export default withNextra(withPwa(config));
+}));

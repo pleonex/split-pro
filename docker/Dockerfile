@@ -17,10 +17,9 @@ COPY --from=deps /app/node_modules ./node_modules
 
 # |- Copy the application source code and build (including prisma generate)
 COPY . .
-COPY .env.development .env.production
 RUN corepack enable pnpm \
     && pnpm prisma generate \
-    && SKIP_ENV_VALIDATION=true pnpm next build
+    && SKIP_ENV_VALIDATION=1 pnpm next build
 
 # 3. Final image with only the production files
 FROM base AS runner
