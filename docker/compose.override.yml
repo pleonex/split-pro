@@ -1,7 +1,0 @@
-services:
-  database:
-      environment:
-        # These settings value must match with the values from the .env files
-        # TODO: Get from compose secrets
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres

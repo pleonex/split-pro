@@ -1,28 +1,36 @@
 services:
   splitpro:
+    image: splitpro
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    image: splitpro
     restart: always
     ports:
-      - "3000:3000"
+      - "${PUBLIC_PORT:-3000}:3000"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   database:
     image: postgres:16-alpine
     restart: always
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: splitpro
+      POSTGRES_USER: splitpro
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -U splitpro"]
       interval: 30s
       timeout: 5s
       retries: 3
-    # Uncomment if you want to debug the database during development ONLY
-    # ports:
-    #   - 5432:5432
 
 volumes:
-  postgres-data: {}
+  pgdata: {}
+
+secrets:
+  db_password:
+    file: db_password.txt

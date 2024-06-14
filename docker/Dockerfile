@@ -1,14 +1,14 @@
 FROM node:18-alpine AS base
 
-# 1. Image that installs dependencies
-FROM base as deps
+# 1. Install dependencies only when needed
+FROM base AS deps
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat
 COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm i
+RUN corepack enable pnpm && pnpm i --frozen-lockfile
 
-# 2. Image that builds the source code
+# 2. Builds the source code only when needed
 FROM base AS builder
 WORKDIR /app
 
@@ -20,11 +20,12 @@ COPY . .
 COPY .env.development .env.production
 RUN corepack enable pnpm && pnpm prisma generate && pnpm next build
 
-# 3. Runner image with only the production files
+# 3. Final image with only the production files
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # |- Create non-root user to run the application
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001

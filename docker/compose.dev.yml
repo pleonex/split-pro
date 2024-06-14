@@ -1,0 +1,12 @@
+# Useful services for development
+services:
+  database:
+    # Expose the ports in case you want to use your own database tool
+    ports:
+      - 5432:5432
+
+  # Setup a simple web service to inspect the database
+  adminer:
+    image: adminer
+    ports:
+      - 5488:8080
