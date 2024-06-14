@@ -8,3 +8,11 @@
 ```
 docker compose -f .\compose.yml -f .\compose.dev.yml up
 ```
+
+## TODO
+
+- [ ] Improve this documentation (setup, .env, devcontainer vs compose)
+- [ ] Improve build by copying only app files
+- [ ] Fix homepage broken
+- [ ] Test
+- [ ] Create K8 resources + image docs

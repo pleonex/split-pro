@@ -29,7 +29,10 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # |- Create non-root user to run the application
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nextjs -u 1001 \
+    && touch .env \
+    && chown nextjs:nodejs .env
 
 # |- Copy the built app files only (not all source code)
 #    see https://nextjs.org/docs/pages/api-reference/next-config-js/output
@@ -48,4 +51,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME 0.0.0.0
 
-CMD docker-init.sh
+CMD /app/docker-init.sh

@@ -7,6 +7,10 @@ services:
     restart: always
     ports:
       - "${PUBLIC_PORT:-3000}:3000"
+    environment:
+      ENV_FILE: /run/secrets/app_settings
+    secrets:
+      - app_settings
     depends_on:
       db:
         condition: service_healthy
@@ -24,7 +28,7 @@ services:
       - db_password
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U splitpro"]
-      interval: 30s
+      interval: 15s
       timeout: 5s
       retries: 3
 
@@ -34,3 +38,6 @@ volumes:
 secrets:
   db_password:
     file: db_password.txt
+
+  app_settings:
+    file: .env.production

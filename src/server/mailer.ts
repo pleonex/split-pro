@@ -2,8 +2,6 @@ import { type User } from 'next-auth';
 import { Resend } from 'resend';
 import { env } from '~/env';
 
-const resend = new Resend(env.RESEND_API_KEY);
-
 export async function sendSignUpEmail(email: string, token: string, url: string) {
   const { host } = new URL(url);
 
@@ -78,6 +76,7 @@ async function sendMail(email: string, subject: string, text: string, html: stri
     console.log('Error sending email using unsend, so fallback to resend', error);
   }
 
+  const resend = new Resend(env.RESEND_API_KEY);
   const response = await resend.emails.send({
     from: env.FROM_EMAIL,
     to: email,
