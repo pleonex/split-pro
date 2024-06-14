@@ -1,21 +1,31 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node-postgres
 {
-    "name": "Node.js & PostgreSQL",
+    "name": "SplitPro",
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
-    "forwardPorts": [3000, 5432],
+    "forwardPorts": [3000, "db:5432", "adminer:8080"],
+    "portsAttributes": {
+        "3000": {
+            "label": "SplitPro",
+            "onAutoForward": "openBrowserOnce"
+        },
+        "db:5432": {
+            "label": "Database"
+        },
+        "adminer:8080": {
+            "label": "Adminer"
+        }
+    },
 
     // When the devcontainer is created install dependencies and run DB migrations
     // the dev will manually the new ones while development happens.
-    // It will use the environment variables from .env.development
-    "containerEnv": { "NODE_ENV": "development" },
-    "postCreateCommand": "npm install && npx prisma migrate deploy",
+    "postCreateCommand": "cp .env.development .env && npm install && npx prisma migrate deploy",
 
     // Each time we start the devcontainer (even if we don't recreate it), run the app
-    "postStartCommand": "npx next start"
+    "postAttachCommand": "npx next dev"
 
     // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
     // "remoteUser": "root"

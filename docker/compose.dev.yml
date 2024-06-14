@@ -1,6 +1,6 @@
 # Useful services for development
 services:
-  database:
+  db:
     # Expose the ports in case you want to use your own database tool
     ports:
       - 5432:5432
